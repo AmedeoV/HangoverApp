@@ -1,0 +1,54 @@
+﻿using HangoverApp.Style;
+using HangoverApp.ViewModels;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Xamarin.Forms;
+
+namespace HangoverApp.Views
+{
+    public class ForumDetailListPage : ContentPage
+    {
+        ForumDetailsViewModel forumViewModel;
+        public ForumDetailListPage(string name, int forumId)
+        {
+            Title = name;
+            NavigationPage.SetHasNavigationBar(this, true);
+            BindingContext = forumViewModel = new ForumDetailsViewModel(forumId);
+            forumViewModel.GetForumListCommand.Execute(null);
+
+            var activityIndicator = new ActivityIndicator
+            {
+                Color = Color.Gray,
+            };
+            activityIndicator.SetBinding(IsVisibleProperty, "IsBusy");
+            activityIndicator.SetBinding(ActivityIndicator.IsRunningProperty, "IsBusy");
+            var forumDetaillist = new ListView
+            {
+                HasUnevenRows = false,
+                ItemTemplate = new DataTemplate(typeof(CPListCell)),
+                ItemsSource = forumViewModel.ForumList,
+                BackgroundColor = Color.White,
+                RowHeight = 120,
+            };
+
+            Content = new StackLayout
+            {
+                HorizontalOptions = LayoutOptions.FillAndExpand,
+                VerticalOptions = LayoutOptions.FillAndExpand,
+                BackgroundColor = Color.White,
+                Children = { forumDetaillist }
+            };
+
+            forumDetaillist.ItemSelected += (sender, e) =>
+            {
+                var selectedObject = e.SelectedItem as HangoverApp.Models.Item;
+
+                var WebViewPage = new WebViewPage(name, selectedObject.websiteLink);
+                Navigation.PushAsync(WebViewPage);
+            };
+        }
+    }
+}
