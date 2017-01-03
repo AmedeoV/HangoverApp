@@ -2,6 +2,7 @@
 using Android.Content.PM;
 using Android.OS;
 using Java.Interop;
+using Plugin.SecureStorage;
 using Xamarinos.AdMob.Forms;
 using Xamarinos.AdMob.Forms.Android;
 
@@ -36,7 +37,7 @@ namespace HangoverApp.Droid
         {
             TabLayoutResource = Resource.Layout.Tabbar;
             ToolbarResource = Resource.Layout.Toolbar;
-
+            SecureStorageImplementation.StoragePassword = "lota";
             base.OnCreate(bundle);
 
             global::Xamarin.Forms.Forms.Init(this, bundle);
