@@ -2,6 +2,7 @@
 using HangoverApp.Helper;
 using HangoverApp.Models;
 using HangoverApp.Views;
+using Plugin.SecureStorage;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,25 +20,28 @@ namespace HangoverApp
         public App()
         {
             // The root page of your application
-            // The root page of your application
             Current = this;
-            // MainPage = new Profile();
-
             BlobCache.ApplicationName = "CPMobile";
+            var authLoginToken = CrossSecureStorage.Current.GetValue("myCookie");
 
-            var authLoginToken = Settings.AuthLoginToken;
+            //try to login using post and the cookie
+            bool isLoggedIn = false;
 
-            if (string.IsNullOrEmpty(authLoginToken))
+            isLoggedIn = TryToLogIn(authLoginToken);
+
+            if (isLoggedIn == false)
+            {
                 MainPage = new LoginPage();
+            }
             else
                 MainPage = new RootPage();
-            //var isLoggedIn = Properties.ContainsKey("IsLoggedIn")?(bool)Properties ["IsLoggedIn"]:false;
 
-            // we remember if they're logged in, and only display the login page if they're not
-            //if (isLoggedIn)
-            //    MainPage = new RootPage ();
-            //else
-            //    MainPage = new RootPage();
+        }
+
+        private bool TryToLogIn(string authLoginToken)
+        {
+
+            throw new NotImplementedException();
         }
 
         #region ILoginManager implementation
