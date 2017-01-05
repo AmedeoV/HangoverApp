@@ -1,5 +1,6 @@
 ﻿using HangoverApp.Helper;
 using HangoverApp.Style;
+using Plugin.SecureStorage;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,8 +30,7 @@ namespace HangoverApp.Views
             var logoutButton = new Button { Text = "Logout", TextColor = Color.White };
             logoutButton.Clicked += (sender, e) =>
             {
-                Settings.AuthLoginToken = "";
-
+                CrossSecureStorage.Current.DeleteKey("myCookie");
                 Navigation.PushModalAsync(new LoginPage());
 
                 //Special Handel for Android Back button

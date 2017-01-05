@@ -6,6 +6,8 @@ using Plugin.SecureStorage;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
@@ -19,10 +21,13 @@ namespace HangoverApp
         public static Color BrandColor = Color.FromHex("#FF9800");
         public App()
         {
-            // The root page of your application
             Current = this;
             BlobCache.ApplicationName = "CPMobile";
+
+            //uncomment to remove the cookie from the phone
+             //CrossSecureStorage.Current.DeleteKey("myCookie");
             var authLoginToken = CrossSecureStorage.Current.GetValue("myCookie");
+
 
             //try to login using post and the cookie
             bool isLoggedIn = false;
@@ -41,7 +46,42 @@ namespace HangoverApp
         private bool TryToLogIn(string authLoginToken)
         {
 
-            throw new NotImplementedException();
+            var url = "https://www.just-eat.co.uk/";
+            var myXMLstring = "";
+            Task task = new Task(() =>
+            {
+                myXMLstring = AccessTheWebAsync(url, authLoginToken).Result;
+            });
+            task.Start();
+            task.Wait();
+
+            var document = new HtmlAgilityPack.HtmlDocument();
+            document.LoadHtml(myXMLstring);
+
+            var isLoggedIn = document.DocumentNode.Descendants("div").FirstOrDefault(x => x.Attributes.Contains("class") && x.Attributes["class"].Value == "nav-container is-logged-in");
+
+            if (isLoggedIn != null)
+            {
+                return true;
+            }
+            else
+                return false;
+        }
+
+        async Task<string> AccessTheWebAsync(string url, string cookie)
+        {
+            var baseAddress = new Uri(url);
+            using (var handler = new HttpClientHandler { UseCookies = false })
+            using (var client = new HttpClient(handler) { BaseAddress = baseAddress })
+            {
+                var message = new HttpRequestMessage(HttpMethod.Get, "");
+                message.Headers.Add("Cookie", cookie);
+                var result = await client.SendAsync(message);
+                result.EnsureSuccessStatusCode();
+
+                return await result.Content.ReadAsStringAsync();
+            }
+
         }
 
         #region ILoginManager implementation
