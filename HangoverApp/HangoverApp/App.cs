@@ -1,5 +1,6 @@
 ﻿using Akavache;
 using HangoverApp.Helper;
+using HangoverApp.Helpers;
 using HangoverApp.Models;
 using HangoverApp.Views;
 using Plugin.SecureStorage;
@@ -16,7 +17,6 @@ namespace HangoverApp
 {
     public class App : Application, ILoginManager
     {
-        // https://gist.github.com/ChaseFlorell/32e1f5c1187d2a7e4835
         public static App Current;
         public static Color BrandColor = Color.FromHex("#FF9800");
         public App()
@@ -25,14 +25,11 @@ namespace HangoverApp
             BlobCache.ApplicationName = "CPMobile";
 
             //uncomment to remove the cookie from the phone
-             //CrossSecureStorage.Current.DeleteKey("myCookie");
+            //CrossSecureStorage.Current.DeleteKey("myCookie");
             var authLoginToken = CrossSecureStorage.Current.GetValue("myCookie");
 
-
-            //try to login using post and the cookie
-            bool isLoggedIn = false;
-
-            isLoggedIn = TryToLogIn(authLoginToken);
+            WebOperations operation = new WebOperations();
+            var isLoggedIn = operation.TryToLogIn(authLoginToken);
 
             if (isLoggedIn == false)
             {
@@ -40,49 +37,8 @@ namespace HangoverApp
             }
             else
                 MainPage = new RootPage();
-
         }
 
-        private bool TryToLogIn(string authLoginToken)
-        {
-
-            var url = "https://www.just-eat.co.uk/";
-            var myXMLstring = "";
-            Task task = new Task(() =>
-            {
-                myXMLstring = AccessTheWebAsync(url, authLoginToken).Result;
-            });
-            task.Start();
-            task.Wait();
-
-            var document = new HtmlAgilityPack.HtmlDocument();
-            document.LoadHtml(myXMLstring);
-
-            var isLoggedIn = document.DocumentNode.Descendants("div").FirstOrDefault(x => x.Attributes.Contains("class") && x.Attributes["class"].Value == "nav-container is-logged-in");
-
-            if (isLoggedIn != null)
-            {
-                return true;
-            }
-            else
-                return false;
-        }
-
-        async Task<string> AccessTheWebAsync(string url, string cookie)
-        {
-            var baseAddress = new Uri(url);
-            using (var handler = new HttpClientHandler { UseCookies = false })
-            using (var client = new HttpClient(handler) { BaseAddress = baseAddress })
-            {
-                var message = new HttpRequestMessage(HttpMethod.Get, "");
-                message.Headers.Add("Cookie", cookie);
-                var result = await client.SendAsync(message);
-                result.EnsureSuccessStatusCode();
-
-                return await result.Content.ReadAsStringAsync();
-            }
-
-        }
 
         #region ILoginManager implementation
 

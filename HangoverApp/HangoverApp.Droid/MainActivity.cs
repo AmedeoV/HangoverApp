@@ -1,6 +1,7 @@
 ﻿using Android.App;
 using Android.Content.PM;
 using Android.OS;
+using Android.Views;
 using Java.Interop;
 using Plugin.SecureStorage;
 using Xamarinos.AdMob.Forms;
@@ -8,7 +9,7 @@ using Xamarinos.AdMob.Forms.Android;
 
 namespace HangoverApp.Droid
 {
-    [Activity(Label = "HangoverApp", Icon = "@drawable/icon", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+    [Activity(Label = "HangoverApp", Icon = "@drawable/icon", Theme = "@style/splashscreen", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation, LaunchMode = LaunchMode.SingleTop)]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
         //protected override void OnCreate(Bundle bundle)
@@ -35,6 +36,9 @@ namespace HangoverApp.Droid
 
         protected override void OnCreate(Bundle bundle)
         {
+            base.Window.RequestFeature(WindowFeatures.ActionBar);
+            base.SetTheme(Resource.Style.MainTheme);
+
             TabLayoutResource = Resource.Layout.Tabbar;
             ToolbarResource = Resource.Layout.Toolbar;
             SecureStorageImplementation.StoragePassword = "lota";

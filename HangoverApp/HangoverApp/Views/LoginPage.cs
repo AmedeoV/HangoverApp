@@ -4,6 +4,8 @@ using Android.Webkit;
 using HangoverApp.ViewModels;
 using Plugin.SecureStorage;
 using System;
+using HangoverApp.Helpers;
+using HangoverApp.Views;
 using Xamarin.Forms;
 
 namespace HangoverApp
@@ -37,7 +39,13 @@ namespace HangoverApp
             {
                 var cookieHeader = CookieManager.Instance.GetCookie((objWebView1.Source as UrlWebViewSource).Url);
                 saveset(cookieHeader);
-                string test = retrieveset();
+                WebOperations operation = new WebOperations();
+                var isLoggedIn = operation.TryToLogIn(cookieHeader);
+                if (isLoggedIn == false)
+                {
+                    return;
+                }
+                new RootPage();
             });
             //
             //

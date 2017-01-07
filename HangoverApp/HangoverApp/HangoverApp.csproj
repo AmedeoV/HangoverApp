@@ -38,6 +38,7 @@
     <Compile Include="App.cs" />
     <Compile Include="Controls\CarouselLayout.cs" />
     <Compile Include="Helpers\Settings.cs" />
+    <Compile Include="Helpers\WebOperations.cs" />
     <Compile Include="Helper\ForumListData.cs" />
     <Compile Include="Helper\Settings.cs" />
     <Compile Include="Helper\StringHelper.cs" />

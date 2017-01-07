@@ -3363,8 +3363,8 @@ namespace HangoverApp.Droid
 			// aapt resource value: 0x7f0a015b
 			public const int Animation_Design_BottomSheetDialog = 2131362139;
 			
-			// aapt resource value: 0x7f0a0175
-			public const int AppCompatDialogStyle = 2131362165;
+			// aapt resource value: 0x7f0a0176
+			public const int AppCompatDialogStyle = 2131362166;
 			
 			// aapt resource value: 0x7f0a00a6
 			public const int Base_AlertDialog_AppCompat = 2131361958;
@@ -3810,8 +3810,8 @@ namespace HangoverApp.Droid
 			// aapt resource value: 0x7f0a0173
 			public const int MainTheme = 2131362163;
 			
-			// aapt resource value: 0x7f0a0174
-			public const int MainTheme_Base = 2131362164;
+			// aapt resource value: 0x7f0a0175
+			public const int MainTheme_Base = 2131362165;
 			
 			// aapt resource value: 0x7f0a0033
 			public const int Platform_AppCompat = 2131361843;
@@ -4469,6 +4469,9 @@ namespace HangoverApp.Droid
 			
 			// aapt resource value: 0x7f0a0017
 			public const int Widget_MediaRouter_MediaRouteButton = 2131361815;
+			
+			// aapt resource value: 0x7f0a0174
+			public const int splashscreen = 2131362164;
 			
 			static Style()
 			{

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using HangoverApp.Helpers;
 using Xamarin.Forms;
 
 namespace HangoverApp.Views
@@ -30,7 +31,8 @@ namespace HangoverApp.Views
             var logoutButton = new Button { Text = "Logout", TextColor = Color.White };
             logoutButton.Clicked += (sender, e) =>
             {
-                CrossSecureStorage.Current.DeleteKey("myCookie");
+                WebOperations operation = new WebOperations();
+                operation.LogOut(CrossSecureStorage.Current.GetValue("myCookie"));
                 Navigation.PushModalAsync(new LoginPage());
 
                 //Special Handel for Android Back button
