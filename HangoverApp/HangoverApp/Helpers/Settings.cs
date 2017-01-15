@@ -1,4 +1,6 @@
 // Helpers/Settings.cs
+
+using System;
 using Plugin.Settings;
 using Plugin.Settings.Abstractions;
 
@@ -11,7 +13,13 @@ namespace HangoverApp.Helpers
   /// </summary>
   public static class Settings
   {
-    private static ISettings AppSettings
+
+        private const string NeedSyncFeedbackKey = "need_sync_feedback";
+        private static readonly bool NeedSyncFeedbackDefault = false;
+
+        private const string LastSyncKey = "last_sync";
+        private static readonly DateTime LastSyncDefault = DateTime.Now.AddDays(-30);
+        private static ISettings AppSettings
     {
       get
       {
@@ -39,5 +47,34 @@ namespace HangoverApp.Helpers
       }
     }
 
-  }
+        public static bool NeedsSync
+        {
+            get { return true; }
+        }
+
+        public static DateTime LastSync
+        {
+            get
+            {
+                return AppSettings.GetValueOrDefault<DateTime>(LastSyncKey, LastSyncDefault);
+            }
+            set
+            {
+                AppSettings.AddOrUpdateValue<DateTime>(LastSyncKey, value);
+            }
+        }
+
+        public static bool NeedSyncFeedback
+        {
+            get
+            {
+                return AppSettings.GetValueOrDefault<bool>(NeedSyncFeedbackKey, NeedSyncFeedbackDefault);
+            }
+            set
+            {
+                AppSettings.AddOrUpdateValue<bool>(NeedSyncFeedbackKey, value);
+            }
+        }
+
+    }
 }

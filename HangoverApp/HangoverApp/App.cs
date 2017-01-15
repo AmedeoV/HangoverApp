@@ -36,7 +36,7 @@ namespace HangoverApp
                 MainPage = new LoginPage();
             }
             else
-                MainPage = new RootPage();
+                MainPage = new MainListPage();
         }
 
 

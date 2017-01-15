@@ -2336,8 +2336,11 @@ namespace HangoverApp.Droid
 			// aapt resource value: 0x7f0200bb
 			public const int mr_ic_play_light = 2130837691;
 			
+			// aapt resource value: 0x7f0200bd
+			public const int notification_template_icon_bg = 2130837693;
+			
 			// aapt resource value: 0x7f0200bc
-			public const int notification_template_icon_bg = 2130837692;
+			public const int RestaurantsBackground = 2130837692;
 			
 			static Drawable()
 			{

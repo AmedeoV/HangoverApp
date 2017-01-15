@@ -22,14 +22,7 @@ namespace HangoverApp.Style
                 TextColor = Color.Black
             };
 
-            var where = new Label()
-            {
-                Text = myProfile.country,
-                FontSize = 12,
-                FontFamily = Device.OnPlatform("HelveticaNeue-Bold", "sans-serif-black", null),
-                XAlign = TextAlignment.Center,
-                TextColor = Color.FromHex("#666")
-            };
+            
 
             var bio = new Label()
             {
@@ -45,7 +38,7 @@ namespace HangoverApp.Style
                 Padding = new Thickness(20, 10),
                 Children = {
                     name,
-                    where,
+       
                     bio
                 }
             };
