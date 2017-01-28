@@ -10,10 +10,10 @@ namespace HangoverApp.ViewModels
     public interface IDataStore
     {
         Task Init();
-        Task<IEnumerable<Store>> GetStoresAsync();
-        Task<Store> AddStoreAsync(Store store);
-        Task<bool> RemoveStoreAsync(Store store);
-        Task<Store> UpdateStoreAsync(Store store);
+        Task<IEnumerable<OpenRestaurant>> GetStoresAsync();
+        Task<OpenRestaurant> AddStoreAsync(OpenRestaurant openRestaurant);
+        Task<bool> RemoveStoreAsync(OpenRestaurant openRestaurant);
+        Task<OpenRestaurant> UpdateStoreAsync(OpenRestaurant openRestaurant);
         Task<Feedback> AddFeedbackAsync(Feedback feedback);
         Task<IEnumerable<Feedback>> GetFeedbackAsync();
         Task<bool> RemoveFeedbackAsync(Feedback feedback);

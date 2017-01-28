@@ -15,5 +15,8 @@ namespace HangoverApp.Models
         public string Reviews { get; set; }
         public string Distance { get; set; }
         public string Url { get; set; }
+        public string RestaurantDetails{ get; set; }
+        public string MinimumSpend { get; set; }
+        public bool IsPreorder { get; set; }
     }
 }

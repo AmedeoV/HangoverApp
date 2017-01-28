@@ -7,8 +7,10 @@ using System;
 using System.Diagnostics;
 using System.Linq;
 using Android.Util;
+using Android.Widget;
 using HangoverApp.Helpers;
 using HangoverApp.Views;
+using Plugin.Connectivity;
 using Xamarin.Forms;
 
 namespace HangoverApp
@@ -27,6 +29,7 @@ namespace HangoverApp
             Xamarin.Forms.WebView objWebView1 = new Xamarin.Forms.WebView();
             objWebView1.HeightRequest = 300;
             objStackLayout.Children.Add(objWebView1);
+
             //
             UrlWebViewSource objUrlToNavigateTo = new UrlWebViewSource()
             {
@@ -70,6 +73,11 @@ namespace HangoverApp
             }
         }
 
+        private void SlowMethod()
+        {
+          
+            
+        }
         protected static void Saveset(string cookie)
         {
             CrossSecureStorage.Current.SetValue("myCookie", cookie);

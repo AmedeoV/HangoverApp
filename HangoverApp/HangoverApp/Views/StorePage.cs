@@ -12,85 +12,90 @@ namespace HangoverApp.Views
 {
     public class StorePage : ContentPage
     {
-        Store Store { get; set; }
+        OpenRestaurant OpenRestaurant { get; set; }
         bool isNew;
-        EntryCell locationCode, mondayOpen, mondayClose, tuesdayOpen, tuesdayClose, wednesdayOpen, wednesdayClose,
+        private EntryCell locationCode;
+
+        EntryCell mondayOpen, mondayClose, tuesdayOpen, tuesdayClose, wednesdayOpen, wednesdayClose,
         thursdayOpen, thursdayClose, fridayOpen, fridayClose, saturdayOpen, saturdayClose, sundayOpen, sundayClose,
-        phoneNumber, streetAddress, city, state, zipCode, country, name, locationHint, imageUrl, starsRatingUrl;
+        reviewsNumber, streetAddress, city, state, zipCode, restaurantStatus, name, cuisine, imageUrl, starsRatingUrl, restaurantDetails, restaurantUrl;
+
         TextCell latitude, longitude, detectLatLong, refreshImage;
         Image image;
         readonly IDataStore dataStore;
-        public StorePage(Store store)
+        public StorePage(OpenRestaurant openRestaurant)
         {
 
             dataStore = DependencyService.Get<IDataStore>();
-            Store = store;
-            if (Store == null)
+            OpenRestaurant = openRestaurant;
+            if (OpenRestaurant == null)
             {
-                Store = new Store();
-                Store.MondayOpen = "9am";
-                Store.TuesdayOpen = "9am";
-                Store.WednesdayOpen = "9am";
-                Store.ThursdayOpen = "9am";
-                Store.FridayOpen = "9am";
-                Store.SaturdayOpen = "9am";
-                Store.SundayOpen = "12pm";
-                Store.MondayClose = "8pm";
-                Store.TuesdayClose = "8pm";
-                Store.WednesdayClose = "8pm";
-                Store.ThursdayClose = "8pm";
-                Store.FridayClose = "8pm";
-                Store.SaturdayClose = "8pm";
-                Store.SundayClose = "6pm";
+                OpenRestaurant = new OpenRestaurant();
+                OpenRestaurant.MondayOpen = "9am";
+                OpenRestaurant.TuesdayOpen = "9am";
+                OpenRestaurant.WednesdayOpen = "9am";
+                OpenRestaurant.ThursdayOpen = "9am";
+                OpenRestaurant.FridayOpen = "9am";
+                OpenRestaurant.SaturdayOpen = "9am";
+                OpenRestaurant.SundayOpen = "12pm";
+                OpenRestaurant.MondayClose = "8pm";
+                OpenRestaurant.TuesdayClose = "8pm";
+                OpenRestaurant.WednesdayClose = "8pm";
+                OpenRestaurant.ThursdayClose = "8pm";
+                OpenRestaurant.FridayClose = "8pm";
+                OpenRestaurant.SaturdayClose = "8pm";
+                OpenRestaurant.SundayClose = "6pm";
                 isNew = true;
             }
 
-            Title = isNew ? "New Store" : "Edit Store";
+            Title = isNew ? "New OpenRestaurant" : "Edit OpenRestaurant";
 
             ToolbarItems.Add(new ToolbarItem
             {
                 Text = "Save",
                 Command = new Command(async (obj) =>
                 {
-                    Store.Name = name.Text.Trim();
-                    Store.LocationHint = locationHint.Text.Trim();
-                    Store.City = city.Text.Trim();
-                    Store.PhoneNumber = phoneNumber.Text.Trim();
-                    Store.Image = imageUrl.Text.Trim();
-                    Store.StarsRating = starsRatingUrl.Text.Trim();
-                    Store.StreetAddress = streetAddress.Text.Trim();
-                    Store.State = state.Text.Trim();
-                    Store.ZipCode = zipCode.Text.Trim();
-                    Store.LocationCode = locationCode.Text.Trim();
-                    Store.Country = country.Text.Trim();
+                    OpenRestaurant.Name = name.Text.Trim();
+                    OpenRestaurant.Cuisine = cuisine.Text.Trim();
+                    OpenRestaurant.Url = restaurantUrl.Text.Trim();
+                    OpenRestaurant.RestaurantDetails = restaurantDetails.Text.Trim();
+                    OpenRestaurant.City = city.Text.Trim();
+                    OpenRestaurant.ReviewsNumber = reviewsNumber.Text.Trim();
+                    OpenRestaurant.Image = imageUrl.Text.Trim();
+                    OpenRestaurant.StarsRating = starsRatingUrl.Text.Trim();
+                    OpenRestaurant.StreetAddress = streetAddress.Text.Trim();
+                    OpenRestaurant.State = state.Text.Trim();
+                    OpenRestaurant.ZipCode = zipCode.Text.Trim();
+                    OpenRestaurant.LocationCode = locationCode.Text.Trim();
+                    OpenRestaurant.RestaurantStatus = restaurantStatus.Text.Trim();
                     double lat;
                     double lng;
 
                     var parse1 = double.TryParse(latitude.Text.Trim(), out lat);
                     var parse2 = double.TryParse(longitude.Text.Trim(), out lng);
-                    Store.Longitude = lng;
-                    Store.Latitude = lat;
-                    Store.MondayOpen = mondayOpen.Text.Trim();
-                    Store.MondayClose = mondayClose.Text.Trim();
-                    Store.TuesdayOpen = tuesdayOpen.Text.Trim();
-                    Store.TuesdayClose = tuesdayClose.Text.Trim();
-                    Store.WednesdayOpen = wednesdayOpen.Text.Trim();
-                    Store.WednesdayClose = wednesdayClose.Text.Trim();
-                    Store.ThursdayOpen = thursdayOpen.Text.Trim();
-                    Store.ThursdayClose = thursdayClose.Text.Trim();
-                    Store.FridayOpen = fridayOpen.Text.Trim();
-                    Store.FridayClose = fridayClose.Text.Trim();
-                    Store.SaturdayOpen = saturdayOpen.Text.Trim();
-                    Store.SaturdayClose = saturdayClose.Text.Trim();
-                    Store.SundayOpen = sundayOpen.Text.Trim();
-                    Store.SundayClose = sundayClose.Text.Trim();
+                    OpenRestaurant.Longitude = lng;
+                    OpenRestaurant.Latitude = lat;
+                    OpenRestaurant.MondayOpen = mondayOpen.Text.Trim();
+                    OpenRestaurant.MondayClose = mondayClose.Text.Trim();
+                    OpenRestaurant.TuesdayOpen = tuesdayOpen.Text.Trim();
+                    OpenRestaurant.TuesdayClose = tuesdayClose.Text.Trim();
+                    OpenRestaurant.WednesdayOpen = wednesdayOpen.Text.Trim();
+                    OpenRestaurant.WednesdayClose = wednesdayClose.Text.Trim();
+                    OpenRestaurant.ThursdayOpen = thursdayOpen.Text.Trim();
+                    OpenRestaurant.ThursdayClose = thursdayClose.Text.Trim();
+                    OpenRestaurant.FridayOpen = fridayOpen.Text.Trim();
+                    OpenRestaurant.FridayClose = fridayClose.Text.Trim();
+                    OpenRestaurant.SaturdayOpen = saturdayOpen.Text.Trim();
+                    OpenRestaurant.SaturdayClose = saturdayClose.Text.Trim();
+                    OpenRestaurant.SundayOpen = sundayOpen.Text.Trim();
+                    OpenRestaurant.SundayClose = sundayClose.Text.Trim();
 
 
 
 
-                    bool isAnyPropEmpty = Store.GetType().GetTypeInfo().DeclaredProperties
-                        .Where(p => p.GetValue(Store) is string && p.CanRead && p.CanWrite && p.Name != "State") // selecting only string props
-                        .Any(p => string.IsNullOrWhiteSpace((p.GetValue(Store) as string)));
+                    bool isAnyPropEmpty = OpenRestaurant.GetType().GetTypeInfo().DeclaredProperties
+                        .Where(p => p.GetValue(OpenRestaurant) is string && p.CanRead && p.CanWrite && p.Name != "State") // selecting only string props
+                        .Any(p => string.IsNullOrWhiteSpace((p.GetValue(OpenRestaurant) as string)));
 
                     if (isAnyPropEmpty || !parse1 || !parse2)
                     {
@@ -100,14 +105,14 @@ namespace HangoverApp.Views
                     Title = "SAVING...";
                     if (isNew)
                     {
-                        await dataStore.AddStoreAsync(Store);
+                        await dataStore.AddStoreAsync(OpenRestaurant);
                     }
                     else
                     {
-                        await dataStore.UpdateStoreAsync(Store);
+                        await dataStore.UpdateStoreAsync(OpenRestaurant);
                     }
 
-                    await DisplayAlert("Saved", "Please refresh store list", "OK");
+                    await DisplayAlert("Saved", "Please refresh OpenRestaurant list", "OK");
                     await Navigation.PopAsync();
                 })
             });
@@ -119,14 +124,15 @@ namespace HangoverApp.Views
                 Intent = TableIntent.Form,
                 Root = new TableRoot {
                     new TableSection ("Information") {
-                        (name = new EntryCell {Label = "Name", Text = Store.Name}),
-                        (locationHint = new EntryCell {Label = "Location Hint", Text = Store.LocationHint}),
-                        (phoneNumber = new EntryCell {Label = "Phone Number", Text = Store.PhoneNumber, Placeholder ="555-555-5555"}),
-                        (locationCode = new EntryCell {Label = "Location Code", Text = Store.LocationCode}),
+                        (name = new EntryCell {Label = "Name", Text = OpenRestaurant.Name}),
+                        (cuisine = new EntryCell {Label = "Location Hint", Text = OpenRestaurant.Cuisine}),
+                        (restaurantDetails = new EntryCell {Label = "Restaurant Details", Text = OpenRestaurant.RestaurantDetails}),
+                        (reviewsNumber = new EntryCell {Label = "Phone Number", Text = OpenRestaurant.ReviewsNumber, Placeholder ="555-555-5555"}),
+                        (locationCode = new EntryCell {Label = "Location Code", Text = OpenRestaurant.LocationCode}),
 
                     },
                     new TableSection ("Image") {
-                        (imageUrl = new EntryCell { Label="Image URL", Text = Store.Image, Placeholder = ".png or .jpg image link" }),
+                        (imageUrl = new EntryCell { Label="Image URL", Text = OpenRestaurant.Image, Placeholder = ".png or .jpg image link" }),
                         (refreshImage = new TextCell()
                             {
                                 Text="Refresh Image"
@@ -139,7 +145,7 @@ namespace HangoverApp.Views
                         }
                     },
                     new TableSection ("StarsRating") {
-                        (imageUrl = new EntryCell { Label="StarsRating URL", Text = Store.StarsRating, Placeholder = ".png or .jpg image link" }),
+                        (imageUrl = new EntryCell { Label="StarsRating URL", Text = OpenRestaurant.StarsRating, Placeholder = ".png or .jpg image link" }),
                         (refreshImage = new TextCell()
                             {
                                 Text="Refresh Image"
@@ -152,35 +158,35 @@ namespace HangoverApp.Views
                         }
                     },
                     new TableSection ("Address") {
-                        (streetAddress = new EntryCell {Label = "Street Address", Text = Store.StreetAddress }),
-                        (city = new EntryCell {Label = "City", Text = Store.City }),
-                        (state = new EntryCell {Label = "State", Text = Store.State }),
-                        (zipCode = new EntryCell {Label = "Zipcode", Text = Store.ZipCode }),
-                        (country = new EntryCell{Label="Country", Text = Store.Country}),
+                        (streetAddress = new EntryCell {Label = "Street Address", Text = OpenRestaurant.StreetAddress }),
+                        (city = new EntryCell {Label = "City", Text = OpenRestaurant.City }),
+                        (state = new EntryCell {Label = "State", Text = OpenRestaurant.State }),
+                        (zipCode = new EntryCell {Label = "Zipcode", Text = OpenRestaurant.ZipCode }),
+                        (restaurantStatus = new EntryCell{Label="RestaurantStatus", Text = OpenRestaurant.RestaurantStatus}),
                         (detectLatLong = new TextCell()
                             {
                                 Text="Detect Lat/Long"
                             }),
-                        (latitude = new TextCell {Text = Store.Latitude.ToString() }),
-                        (longitude = new TextCell {Text = Store.Longitude.ToString() }),
+                        (latitude = new TextCell {Text = OpenRestaurant.Latitude.ToString() }),
+                        (longitude = new TextCell {Text = OpenRestaurant.Longitude.ToString() }),
                     },
 
 
                     new TableSection ("Hours") {
-                        (mondayOpen = new EntryCell {Label = "Monday Open", Text = Store.MondayOpen}),
-                        (mondayClose = new EntryCell {Label = "Monday Close", Text = Store.MondayClose}),
-                        (tuesdayOpen = new EntryCell {Label = "Tuesday Open", Text = Store.TuesdayOpen}),
-                        (tuesdayClose = new EntryCell {Label = "Tuesday Close", Text = Store.TuesdayClose}),
-                        (wednesdayOpen = new EntryCell {Label = "Wedneday Open", Text = Store.WednesdayOpen}),
-                        (wednesdayClose = new EntryCell {Label = "Wedneday Close", Text = Store.WednesdayClose}),
-                        (thursdayOpen = new EntryCell {Label = "Thursday Open", Text = Store.ThursdayOpen}),
-                        (thursdayClose = new EntryCell {Label = "Thursday Close", Text = Store.ThursdayClose}),
-                        (fridayOpen = new EntryCell {Label = "Friday Open", Text = Store.FridayOpen}),
-                        (fridayClose = new EntryCell {Label = "Friday Close", Text = Store.FridayClose}),
-                        (saturdayOpen = new EntryCell {Label = "Saturday Open", Text = Store.SaturdayOpen}),
-                        (saturdayClose =new EntryCell {Label = "Saturday Close", Text = Store.SaturdayClose}),
-                        (sundayOpen = new EntryCell {Label = "Sunday Open", Text = Store.SundayOpen}),
-                        (sundayClose = new EntryCell {Label = "Sunday Close", Text = Store.SundayClose}),
+                        (mondayOpen = new EntryCell {Label = "Monday Open", Text = OpenRestaurant.MondayOpen}),
+                        (mondayClose = new EntryCell {Label = "Monday Close", Text = OpenRestaurant.MondayClose}),
+                        (tuesdayOpen = new EntryCell {Label = "Tuesday Open", Text = OpenRestaurant.TuesdayOpen}),
+                        (tuesdayClose = new EntryCell {Label = "Tuesday Close", Text = OpenRestaurant.TuesdayClose}),
+                        (wednesdayOpen = new EntryCell {Label = "Wedneday Open", Text = OpenRestaurant.WednesdayOpen}),
+                        (wednesdayClose = new EntryCell {Label = "Wedneday Close", Text = OpenRestaurant.WednesdayClose}),
+                        (thursdayOpen = new EntryCell {Label = "Thursday Open", Text = OpenRestaurant.ThursdayOpen}),
+                        (thursdayClose = new EntryCell {Label = "Thursday Close", Text = OpenRestaurant.ThursdayClose}),
+                        (fridayOpen = new EntryCell {Label = "Friday Open", Text = OpenRestaurant.FridayOpen}),
+                        (fridayClose = new EntryCell {Label = "Friday Close", Text = OpenRestaurant.FridayClose}),
+                        (saturdayOpen = new EntryCell {Label = "Saturday Open", Text = OpenRestaurant.SaturdayOpen}),
+                        (saturdayClose =new EntryCell {Label = "Saturday Close", Text = OpenRestaurant.SaturdayClose}),
+                        (sundayOpen = new EntryCell {Label = "Sunday Open", Text = OpenRestaurant.SundayOpen}),
+                        (sundayClose = new EntryCell {Label = "Sunday Close", Text = OpenRestaurant.SundayClose}),
                     },
                 },
             };
@@ -195,7 +201,7 @@ namespace HangoverApp.Views
             //    var coder = new Xamarin.Forms.Maps.Geocoder();
             //    var oldTitle = Title;
             //    Title = "Please wait...";
-            //    var locations = await coder.GetPositionsForAddressAsync(streetAddress.Text + " " + city.Text + ", " + state.Text + " " + zipCode.Text + " " + country.Text);
+            //    var locations = await coder.GetPositionsForAddressAsync(streetAddress.Text + " " + city.Text + ", " + state.Text + " " + zipCode.Text + " " + restaurantStatus.Text);
             //    Title = oldTitle;
             //    foreach (var location in locations)
             //    {

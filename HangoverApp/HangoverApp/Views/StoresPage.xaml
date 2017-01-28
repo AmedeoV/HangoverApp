@@ -14,10 +14,10 @@
 				IsGroupingEnabled="True"
             	GroupDisplayBinding="{Binding Key}"
             	HasUnevenRows="true">
-				<ListView.ItemTemplate>
+        <ListView.ItemTemplate>
 					<DataTemplate>
-						 <ViewCell>
-				            <Grid Padding="10,5">
+            <ViewCell>
+              <Grid Padding="10,5">
 				              <Grid.ColumnDefinitions>
 				                <ColumnDefinition Width="Auto"/>
 				                <ColumnDefinition Width="*"/>
@@ -47,7 +47,8 @@
 				                           Spacing="20"
 				                           VerticalOptions="Start">
 				                <Label Text="{Binding Name}" FontSize="Medium"  TextColor="#3498DB" LineBreakMode="NoWrap"/>
-                        <Label Text="{Binding LocationHint}" FontSize="Small" LineBreakMode="WordWrap"/>
+                        <Label Text="{Binding Cuisine}" FontSize="Small" LineBreakMode="WordWrap"/>
+                        <!--<Label Text="Testing" FontSize="Micro" LineBreakMode="WordWrap"/>-->
                       </StackLayout>
                       <StackLayout Grid.Column="1" 
 				                           Padding="8" 
@@ -59,8 +60,9 @@
                                             VerticalOptions="End"
                                             HorizontalOptions="Start">
                         </controls:CircleImage>
-                        <Label Text="{Binding PhoneNumber}" FontSize="Micro" LineBreakMode="WordWrap"/>
-				              </StackLayout>
+                        <Label Text="{Binding ReviewsNumber}" FontSize="Micro" LineBreakMode="WordWrap"/>
+                        <Label Text="{Binding RestaurantDetails}" FontSize="Micro" LineBreakMode="WordWrap"/>
+                      </StackLayout>
 				            </Grid>
 				            <ViewCell.ContextActions>
                      		<MenuItem Clicked="OnDelete"

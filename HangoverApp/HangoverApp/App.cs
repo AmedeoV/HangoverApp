@@ -11,6 +11,9 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Android.OS;
+using Android.Widget;
+using Plugin.Connectivity;
 using Xamarin.Forms;
 
 namespace HangoverApp
@@ -18,25 +21,36 @@ namespace HangoverApp
     public class App : Application, ILoginManager
     {
         public static App Current;
-        public static Color BrandColor = Color.FromHex("#FF9800");
+        public static Color BrandColor = Color.FromHex("#8BC34A");
         public App()
         {
             Current = this;
-            BlobCache.ApplicationName = "CPMobile";
 
-            //uncomment to remove the cookie from the phone
-            //CrossSecureStorage.Current.DeleteKey("myCookie");
-            var authLoginToken = CrossSecureStorage.Current.GetValue("myCookie");
-
-            WebOperations operation = new WebOperations();
-            var isLoggedIn = operation.TryToLogIn(authLoginToken);
-
-            if (isLoggedIn == false)
+            if (!CrossConnectivity.Current.IsConnected)
             {
-                MainPage = new LoginPage();
+                MainPage = new OfflinePage();
             }
             else
-                MainPage = new MainListPage();
+            {
+                BlobCache.ApplicationName = "Hangover App";
+
+                //uncomment to remove the cookie from the phone
+                //CrossSecureStorage.Current.DeleteKey("myCookie");
+                //CrossSecureStorage.Current.DeleteKey("postcode");
+                var authLoginToken = CrossSecureStorage.Current.GetValue("myCookie");
+
+                WebOperations operation = new WebOperations();
+                var isLoggedIn = operation.TryToLogIn(authLoginToken);
+
+                if (isLoggedIn == false)
+                {
+
+                    MainPage = new LoginPage();
+                }
+                else
+                    MainPage = new MainListPage();
+            }
+
         }
 
 

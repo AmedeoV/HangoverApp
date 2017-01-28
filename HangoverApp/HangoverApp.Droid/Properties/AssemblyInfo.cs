@@ -17,6 +17,7 @@ using Android.App;
 [assembly: ComVisible(false)]
 [assembly: UsesPermission(Android.Manifest.Permission.Internet)]
 [assembly: UsesPermission(Android.Manifest.Permission.AccessNetworkState)]
+[assembly: UsesFeature("android.hardware.wifi", Required = false)]
 
 // Version information for an assembly consists of the following four values:
 //

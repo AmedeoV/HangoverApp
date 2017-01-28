@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using HangoverApp.Models;
 using HangoverApp.ViewModels;
 using HangoverApp.Views;
@@ -14,13 +15,15 @@ namespace HangoverApp
 		StoresViewModel viewModel;
         readonly IDataStore dataStore;
         public ObservableRangeCollection<Restaurant> Stores { get; set; }
-        public ObservableRangeCollection<Grouping<string, Store>> StoresGrouped { get; set; }
+        public ObservableRangeCollection<Grouping<string, OpenRestaurant>> StoresGrouped { get; set; }
         public bool ForceSync { get; set; }
         public StoresPage (List<Restaurant> restaurants)
 		{
+            List<Restaurant> restaurantsList = new List<Restaurant>();
+            restaurantsList = restaurants;
             dataStore = DependencyService.Get<IDataStore>();
             Stores = new ObservableRangeCollection<Restaurant>();
-            StoresGrouped = new ObservableRangeCollection<Grouping<string, Store>>();
+            StoresGrouped = new ObservableRangeCollection<Grouping<string, OpenRestaurant>>();
             BackgroundImage = "RestaurantsBackground.png";
             InitializeComponent();
             BindingContext = viewModel = new StoresViewModel (this);
@@ -29,36 +32,33 @@ namespace HangoverApp
 
             Stores.ReplaceRange(restaurants);
             viewModel.GetStoresCommand(restaurants);
-
-            //viewModel.ForceSync = true;
-            NewStore.Clicked += async (sender, e) =>
+            StoreList.ItemSelected += async (sender, e) =>
             {
+                string restName = (e.SelectedItem as OpenRestaurant).Name;
+                string url = "";
+                foreach (var rest in restaurantsList)
+                {
+                    if (restName == rest.Name)
+                    {
+                        url = rest.Url;
+                    }
+                }
+
+                //var url = restaurantsList.Select(restaurant => restaurant.Name == restName);
                 Page page = new Page();
-                await page.Navigation.PushModalAsync(new MainListPage());
+                await page.Navigation.PushModalAsync(new RestaurantMenuPage("https://www.just-eat.co.uk" + url));
                 if (Device.OS == TargetPlatform.Android)
-                    Application.Current.MainPage = new MainListPage();
+                    Application.Current.MainPage = new RestaurantMenuPage("https://www.just-eat.co.uk" + url);
             };
-
-            //StoreList.ItemSelected += async (sender, e) => 
-            //{
-            //	if(StoreList.SelectedItem == null)
-            //		return;
-
-
-            //	await Navigation.PushAsync(new StorePage(e.SelectedItem as Store));
-
-
-            //	StoreList.SelectedItem = null;
-            //};
         }
 
 		public async void OnDelete (object sender, EventArgs e) {
 			var mi = ((MenuItem)sender);
 
-			var result = await DisplayAlert ("Delete?", "Are you sure you want to remove this store?", "Yes", "No");
+			var result = await DisplayAlert ("Delete?", "Are you sure you want to remove this OpenRestaurant?", "Yes", "No");
             if (result)
             {
-                await viewModel.DeleteStore(mi.CommandParameter as Store);
+                await viewModel.DeleteStore(mi.CommandParameter as OpenRestaurant);
             }
 		}
 

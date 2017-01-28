@@ -14,55 +14,55 @@ namespace HangoverApp.ViewModels
     public class StoresViewModel : ViewModelBase
     {
         readonly IDataStore dataStore;
-        public ObservableRangeCollection<Store> Stores { get; set; }
-        public ObservableRangeCollection<Grouping<string, Store>> StoresGrouped { get; set; }
+        public ObservableRangeCollection<OpenRestaurant> Stores { get; set; }
+        public ObservableRangeCollection<Grouping<string, OpenRestaurant>> StoresGrouped { get; set; }
         public bool ForceSync { get; set; }
         public StoresViewModel(Page page) : base(page)
         {
             dataStore = DependencyService.Get<IDataStore>();
-            Stores = new ObservableRangeCollection<Store>();
-            StoresGrouped = new ObservableRangeCollection<Grouping<string, Store>>();
+            Stores = new ObservableRangeCollection<OpenRestaurant>();
+            StoresGrouped = new ObservableRangeCollection<Grouping<string, OpenRestaurant>>();
         }
-        public Action<Store> ItemSelected { get; set; }
+        public Action<OpenRestaurant> ItemSelected { get; set; }
 
-        Store selectedStore;
-        public Store SelectedStore
+        OpenRestaurant _selectedOpenRestaurant;
+        public OpenRestaurant SelectedOpenRestaurant
         {
-            get { return selectedStore; }
+            get { return _selectedOpenRestaurant; }
             set
             {
-                selectedStore = value;
-                OnPropertyChanged("SelectedStore");
-                if (selectedStore == null)
+                _selectedOpenRestaurant = value;
+                OnPropertyChanged("_selectedOpenRestaurant");
+                if (_selectedOpenRestaurant == null)
                     return;
 
                 if (ItemSelected == null)
                 {
-                    page.Navigation.PushAsync(new StorePage(selectedStore));
-                    SelectedStore = null;
+                    page.Navigation.PushAsync(new StorePage(_selectedOpenRestaurant));
+                    SelectedOpenRestaurant = null;
                 }
                 else
                 {
-                    ItemSelected.Invoke(selectedStore);
+                    ItemSelected.Invoke(_selectedOpenRestaurant);
                 }
             }
         }
 
 
-        public async Task DeleteStore(Store store)
+        public async Task DeleteStore(OpenRestaurant openRestaurant)
         {
             if (IsBusy)
                 return;
             IsBusy = true;
             try
             {
-                await dataStore.RemoveStoreAsync(store);
-                Stores.Remove(store);
+                await dataStore.RemoveStoreAsync(openRestaurant);
+                Stores.Remove(openRestaurant);
                 Sort();
             }
             catch (Exception ex)
             {
-                await page.DisplayAlert("Uh Oh :(", $"Unable to remove {store?.Name ?? "Unknown"}, please try again: {ex.Message}", "OK");
+                await page.DisplayAlert("Uh Oh :(", $"Unable to remove {openRestaurant?.Name ?? "Unknown"}, please try again: {ex.Message}", "OK");
             }
             finally
             {
@@ -94,24 +94,44 @@ namespace HangoverApp.ViewModels
                 Stores.Clear();
 
                 //var stores = await dataStore.GetStoresAsync();
-                var stores = new List<Store>();
+                var openRestaurants = new List<OpenRestaurant>();
 
                 foreach (var restaurant in restaurants)
                 {
-                    stores.Add(new Store()
+                    if (!restaurant.IsPreorder)
                     {
-                        Country = "Restaurants",
-                        Name = restaurant.Name,
-                        Image = "https:" + restaurant.Logo,
-                        PhoneNumber = "(" + restaurant.Reviews + ")",
-                        ZipCode = "Zipcode",
-                        StarsRating = "https:" + restaurant.StarsImage,
-                        LocationHint = restaurant.Cuisine,
-                    });
+                        openRestaurants.Add(new OpenRestaurant()
+                        {
+                            RestaurantStatus = "Open Restaurants",
+                            Name = restaurant.Name,
+                            Image = "https:" + restaurant.Logo,
+                            ReviewsNumber = "(" + restaurant.Reviews + ")",
+                            StarsRating = "https:" + restaurant.StarsImage,
+                            Cuisine = restaurant.Cuisine,
+                            RestaurantDetails = restaurant.RestaurantDetails,
+                            Url = restaurant.Url
+                        });
+                    }
+                    else
+                    {
+                        openRestaurants.Add(new OpenRestaurant()
+                        {
+                            RestaurantStatus = "Pre-orders",
+                            Name = restaurant.Name,
+                            Image = "https:" + restaurant.Logo,
+                            ReviewsNumber = "(" + restaurant.Reviews + ")",
+                            StarsRating = "https:" + restaurant.StarsImage,
+                            Cuisine = restaurant.Cuisine,
+                            RestaurantDetails = restaurant.RestaurantDetails,
+                            Url = restaurant.Url
+                        });
+
+                    }
+
 
                 }
-                
-                Stores.ReplaceRange(stores);
+
+                Stores.ReplaceRange(openRestaurants);
 
                 Sort();
             }
@@ -137,9 +157,9 @@ namespace HangoverApp.ViewModels
 
             StoresGrouped.Clear();
             var sorted = from store in Stores
-                         orderby store.Country, store.City
-                         group store by store.Country into storeGroup
-                         select new Grouping<string, Store>(storeGroup.Key, storeGroup);
+                         orderby store.RestaurantStatus, store.City
+                         group store by store.RestaurantStatus into storeGroup
+                         select new Grouping<string, OpenRestaurant>(storeGroup.Key, storeGroup);
 
             StoresGrouped.ReplaceRange(sorted);
         }

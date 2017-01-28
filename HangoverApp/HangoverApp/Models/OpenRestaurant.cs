@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 
 namespace HangoverApp.Models
 {
-    public class Store
+    public class OpenRestaurant
     {
 
         [JsonProperty(PropertyName = "id")]
@@ -17,12 +17,14 @@ namespace HangoverApp.Models
         public string Version { get; set; } = string.Empty;
 
         public string Name { get; set; } = string.Empty;
-        public string LocationHint { get; set; } = string.Empty;
+        public string Cuisine { get; set; } = string.Empty;
+        public string Url { get; set; } = string.Empty;
+        public string RestaurantDetails { get; set; } = string.Empty;
 
         public string StreetAddress { get; set; } = string.Empty;
         public string City { get; set; } = string.Empty;
         public string State { get; set; } = string.Empty;
-        public string Country { get; set; } = string.Empty;
+        public string RestaurantStatus { get; set; } = string.Empty;
         public string ZipCode { get; set; } = string.Empty;
         public string Image { get; set; } = string.Empty;
         public string StarsRating { get; set; } = string.Empty;
@@ -38,6 +40,12 @@ namespace HangoverApp.Models
         public Uri StarsRatingUri
         {
             get { return new System.Uri(StarsRating); }
+        }
+
+        [JsonIgnore]
+        public Uri UrlUri
+        {
+            get { return new System.Uri(Url); }
         }
 
         public double Latitude { get; set; } = 0;
@@ -58,7 +66,7 @@ namespace HangoverApp.Models
         public string SundayOpen { get; set; } = string.Empty;
         public string SundayClose { get; set; } = string.Empty;
 
-        public string PhoneNumber { get; set; } = string.Empty;
+        public string ReviewsNumber { get; set; } = string.Empty;
         public string LocationCode { get; set; } = string.Empty;
 
 
