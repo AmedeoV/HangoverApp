@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using HtmlAgilityPack;
 using Plugin.SecureStorage;
 
 namespace HangoverApp.Helpers
@@ -14,7 +15,7 @@ namespace HangoverApp.Helpers
         public bool TryToLogIn(string authLoginToken)
         {
 
-            var url = "https://www.just-eat.co.uk/";
+            var url = CrossSecureStorage.Current.GetValue("myCountry");
             var myXMLstring = "";
             Task task = new Task(() =>
             {
@@ -26,7 +27,25 @@ namespace HangoverApp.Helpers
             var document = new HtmlAgilityPack.HtmlDocument();
             document.LoadHtml(myXMLstring);
             //Italy and Ireland : class nav-list-item has-sublist
-            var isLoggedIn = document.DocumentNode.Descendants("div").FirstOrDefault(x => x.Attributes.Contains("class") && x.Attributes["class"].Value == "nav-container is-logged-in");
+            HtmlNode isLoggedIn = null;
+            if (url.Contains("co.uk"))
+            {
+                isLoggedIn =
+                    document.DocumentNode.Descendants("div")
+                        .FirstOrDefault(
+                            x =>
+                                x.Attributes.Contains("class") &&
+                                x.Attributes["class"].Value == "nav-container is-logged-in");
+            }
+            else
+            {
+                isLoggedIn =
+                    document.DocumentNode.Descendants("li")
+                        .FirstOrDefault(
+                            x =>
+                                x.Attributes.Contains("class") &&
+                                x.Attributes["class"].Value == "nav-list-item has-sublist");
+            }
 
             if (isLoggedIn != null)
             {
@@ -38,7 +57,7 @@ namespace HangoverApp.Helpers
         public bool LogOut(string authLoginToken)
         {
             CrossSecureStorage.Current.DeleteKey("myCookie");
-            var url = "https://www.just-eat.co.uk/";
+            var url = CrossSecureStorage.Current.GetValue("myCountry");
             var myXMLstring = "";
             Task task = new Task(() =>
             {

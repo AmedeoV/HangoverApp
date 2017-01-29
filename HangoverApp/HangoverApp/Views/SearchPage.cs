@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using Android.Webkit;
 using HangoverApp.Helpers;
 using HtmlAgilityPack;
 using Plugin.SecureStorage;
@@ -12,14 +11,10 @@ using Xamarin.Forms;
 
 namespace HangoverApp.Views
 {
-    public class ReviewsPage : ContentPage
+    public class SearchPage : ContentPage
     {
-        private readonly NavigationHelper _navigationHelper;
-        public NavigationHelper NavigationHelper
-        {
-            get { return _navigationHelper; }
-        }
-        public ReviewsPage(string source)
+
+        public SearchPage(string source)
         {
             Button btnCheckOtherRestaurants = new Button()
             {
@@ -27,41 +22,32 @@ namespace HangoverApp.Views
                 BackgroundColor = Color.FromHex("#8BC34A")
             };
 
-            var activityIndicator = new ProgressBar()
-            {
-                Progress = .2,
-                IsVisible = false
-            };
 
             StackLayout objStackLayout = new StackLayout()
             {
             };
-
-            BackgroundImage = "RestaurantsBackground.png";
+            //
             Xamarin.Forms.WebView objWebView1 = new Xamarin.Forms.WebView();
             objWebView1.HeightRequest = 300;
-            objStackLayout.Children.Add(objWebView1);
-            objStackLayout.Children.Add(btnCheckOtherRestaurants);
-            objStackLayout.Children.Add(activityIndicator);
 
-            //
             var document = new HtmlAgilityPack.HtmlDocument();
             document.LoadHtml(source);
 
-            HtmlNode node = document.DocumentNode.Descendants("div").FirstOrDefault(d => d.Attributes.Contains("id") && d.Attributes["id"].Value == "restaurant");
-
             var scriptsAndStyle = document.DocumentNode.Descendants()
-           .Where(n => n.Name == "script" | n.Name == "noscript" | n.Name == "link").ToList();
+           .Where(n => n.Name == "script" |n.Name == "link").ToList();
+
+            HtmlNode node = document.DocumentNode.Descendants("section").FirstOrDefault(d => d.Attributes.Contains("id") && d.Attributes["id"].Value == "search-section");
+
 
             string newHtml = node.InnerHtml;
 
             foreach (var item in scriptsAndStyle)
             {
-                newHtml = newHtml + item.OuterHtml;
+                source = source + item.OuterHtml;
             }
 
             var baseUri = new Uri(CrossSecureStorage.Current.GetValue("myCountry"));
-            var pattern = @"(?<name>src|href|action)=""(?<value>/[^""]*)""";
+            var pattern = @"(?<name>src|href|action|srcset)=""(?<value>/[^""]*)""";
             var matchEvaluator = new MatchEvaluator(
                 match =>
                 {
@@ -76,31 +62,19 @@ namespace HangoverApp.Views
 
                     return null;
                 });
-            var adjustedHtml = Regex.Replace(newHtml, pattern, matchEvaluator);
-
+            var adjustedHtml = Regex.Replace(source, pattern, matchEvaluator);
             var htmlSource = new HtmlWebViewSource();
             htmlSource.Html = adjustedHtml;
             objWebView1.Source = htmlSource;
-
-            //objWebView1.Source = objUrlToNavigateTo;
-
             objWebView1.VerticalOptions = LayoutOptions.FillAndExpand;
             objWebView1.HorizontalOptions = LayoutOptions.FillAndExpand;
-            _navigationHelper = new NavigationHelper();
-            objWebView1.Navigating +=
-                (sender, e) =>
-                {
-                    NavigationHelper.ConfirmNavigationAndSendToWebBrowserApp(sender, e, activityIndicator);
-                };
-            //
-            //
-            this.Content = objStackLayout;
-            btnCheckOtherRestaurants.Clicked +=
-                (sender, e) =>
-                {
-                    NavigationHelper.CheckOtherRestaurantsEvent(sender, e, activityIndicator, objWebView1);
-                };
-        }
 
+            objStackLayout.Children.Add(objWebView1);
+            objStackLayout.Children.Add(btnCheckOtherRestaurants);
+
+
+
+            this.Content = objStackLayout;
+        }
     }
 }

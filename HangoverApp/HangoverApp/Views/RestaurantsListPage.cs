@@ -62,7 +62,7 @@ namespace HangoverApp.Views
                 newHtml = newHtml + item.OuterHtml;
             }
 
-            var baseUri = new Uri("https://www.just-eat.co.uk/");
+            var baseUri = new Uri(CrossSecureStorage.Current.GetValue("myCountry"));
             var pattern = @"(?<name>src|href|data-original)=""(?<value>/[^""]*)""";
             var matchEvaluator = new MatchEvaluator(
                 match =>

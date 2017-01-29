@@ -12,6 +12,8 @@ namespace HangoverApp.Views
     {
         public LoginPage()
         {
+            string countryUrl = CrossSecureStorage.Current.GetValue("myCountry");
+
             Device.BeginInvokeOnMainThread(() => {
                 DisplayAlert("Hey " + "you", "Welcome", "OK");
             });
@@ -26,7 +28,7 @@ namespace HangoverApp.Views
             //
             UrlWebViewSource objUrlToNavigateTo = new UrlWebViewSource()
             {
-                Url = "https://www.just-eat.co.uk/account/login"
+                Url = countryUrl + "account/logout/?returnurl=/account/login"
             };
 
             objWebView1.Source = objUrlToNavigateTo;
@@ -56,9 +58,14 @@ namespace HangoverApp.Views
                         var isLoggedIn = operation.TryToLogIn(cookieHeader);
                         if (isLoggedIn)
                         {
-                            await page.Navigation.PushModalAsync(new MainListPage());
+                            var source = await operation.AccessTheWebAsync(e.Url, cookieHeader, "");
+                            await page.Navigation.PushModalAsync(new SearchPage(source));
                             if (Device.OS == TargetPlatform.Android)
-                                Application.Current.MainPage = new MainListPage();
+                                Application.Current.MainPage = new SearchPage(source);
+
+                            //await page.Navigation.PushModalAsync(new MainListPage());
+                            //if (Device.OS == TargetPlatform.Android)
+                            //    Application.Current.MainPage = new MainListPage();
                         }
 
                     }

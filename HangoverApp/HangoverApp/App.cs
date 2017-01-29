@@ -25,19 +25,30 @@ namespace HangoverApp
         {
             Current = this;
             //uncomment to remove the cookie from the phone
-            //CrossSecureStorage.Current.DeleteKey("myCookie");
-            //CrossSecureStorage.Current.DeleteKey("postcode");
+            CrossSecureStorage.Current.DeleteKey("myCookie");
+            CrossSecureStorage.Current.DeleteKey("postcode");
+            CrossSecureStorage.Current.DeleteKey("myCountry");
+
             var authLoginToken = CrossSecureStorage.Current.GetValue("myCookie");
+            var myCountry = CrossSecureStorage.Current.GetValue("myCountry");
 
-            WebOperations operation = new WebOperations();
-            var isLoggedIn = operation.TryToLogIn(authLoginToken);
-
-            if (isLoggedIn == false)
+            if (!String.IsNullOrEmpty(myCountry))
             {
-                MainPage = new LoginPage();
+                WebOperations operation = new WebOperations();
+                var isLoggedIn = operation.TryToLogIn(authLoginToken);
+
+                if (isLoggedIn == false)
+                {
+                    MainPage = new LoginPage();
+                }
+                else
+                    MainPage = new MainListPage();
             }
             else
-                MainPage = new MainListPage();
+            {
+                MainPage = new CountryPage();
+            }
+
 
         }
 
