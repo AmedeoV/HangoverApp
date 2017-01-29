@@ -1,19 +1,12 @@
-﻿using Android.Content;
-using Android.Preferences;
-using Android.Webkit;
-using HangoverApp.ViewModels;
-using Plugin.SecureStorage;
-using System;
+﻿using System;
 using System.Diagnostics;
-using System.Linq;
-using Android.Util;
-using Android.Widget;
+using Android.Webkit;
 using HangoverApp.Helpers;
-using HangoverApp.Views;
 using Plugin.Connectivity;
+using Plugin.SecureStorage;
 using Xamarin.Forms;
 
-namespace HangoverApp
+namespace HangoverApp.Views
 {
     public partial class LoginPage : ContentPage
     {
@@ -50,26 +43,36 @@ namespace HangoverApp
         {
             Page page = new Page();
 
-            if (e.Url.StartsWith("http"))
+            if (CrossConnectivity.Current.IsConnected)
             {
-                try
-                {
-                    var cookieHeader = CookieManager.Instance.GetCookie(e.Url);
-                    Saveset(cookieHeader);
-                    WebOperations operation = new WebOperations();
-                    var isLoggedIn = operation.TryToLogIn(cookieHeader);
-                    if (isLoggedIn)
-                    {
-                        page.Navigation.PushModalAsync(new MainListPage());
-                        if (Device.OS == TargetPlatform.Android)
-                            Application.Current.MainPage = new MainListPage();
-                    }
 
-                }
-                catch (Exception ex)
+                if (e.Url.StartsWith("http"))
                 {
-                    Debug.WriteLine(ex.ToString());
+                    try
+                    {
+                        var cookieHeader = CookieManager.Instance.GetCookie(e.Url);
+                        Saveset(cookieHeader);
+                        WebOperations operation = new WebOperations();
+                        var isLoggedIn = operation.TryToLogIn(cookieHeader);
+                        if (isLoggedIn)
+                        {
+                            await page.Navigation.PushModalAsync(new MainListPage());
+                            if (Device.OS == TargetPlatform.Android)
+                                Application.Current.MainPage = new MainListPage();
+                        }
+
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine(ex.ToString());
+                    }
                 }
+            }
+            else
+            {
+
+                await page.DisplayAlert("Connection", "Connection lost, please check your connection and retry", "OK");
+                
             }
         }
 

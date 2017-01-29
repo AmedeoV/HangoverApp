@@ -21,33 +21,55 @@ namespace HangoverApp.Droid
     {
         protected override void OnCreate(Bundle bundle)
         {
-            List<string> helloMessages = new List<string>()
+            if (CrossConnectivity.Current.IsConnected)
             {
-                "Had fun last night? :D",
-                "Have you taken some painkillers? :D",
-                "Hungry? :D",
-                "I feel you.. :D",
-            };
-            // add items to the list
-            Random r = new Random();
-            int index = r.Next(helloMessages.Count);
+                List<string> helloMessages = new List<string>()
+                {
+                    "Had fun last night? :D",
+                    "Have you taken some painkillers? :D",
+                    "Hungry? :D",
+                    "I feel you.. :D",
+                };
+                // add items to the list
+                Random r = new Random();
+                int index = r.Next(helloMessages.Count);
 
-            var myHandler = new Handler();
-            myHandler.Post(() => {
-                Toast.MakeText(this, helloMessages[index], ToastLength.Long).Show();
-            });
-            base.Window.RequestFeature(WindowFeatures.ActionBar);
-            base.SetTheme(Resource.Style.MainTheme);
+                var myHandler = new Handler();
+                myHandler.Post(() =>
+                {
+                    Toast.MakeText(this, helloMessages[index], ToastLength.Long).Show();
+                });
+                base.Window.RequestFeature(WindowFeatures.ActionBar);
+                base.SetTheme(Resource.Style.MainTheme);
 
-            Window.AddFlags(WindowManagerFlags.DrawsSystemBarBackgrounds);
-            Window.SetStatusBarColor(Color.FromHex("#8BC34A").ToAndroid());
-            TabLayoutResource = Resource.Layout.Tabbar;
-            ToolbarResource = Resource.Layout.Toolbar;
-            SecureStorageImplementation.StoragePassword = "lota";
-            base.OnCreate(bundle);
-            global::Xamarin.Forms.Forms.Init(this, bundle);
-            LoadApplication(new App());
+                Window.AddFlags(WindowManagerFlags.DrawsSystemBarBackgrounds);
+                Window.SetStatusBarColor(Color.FromHex("#8BC34A").ToAndroid());
+                TabLayoutResource = Resource.Layout.Tabbar;
+                ToolbarResource = Resource.Layout.Toolbar;
+                SecureStorageImplementation.StoragePassword = "lota";
+                base.OnCreate(bundle);
+                global::Xamarin.Forms.Forms.Init(this, bundle);
+                LoadApplication(new App());
+            }
+            else
+            {
+                var myHandler = new Handler();
+                myHandler.Post(() =>
+                {
+                    Toast.MakeText(this,"You need an interent connection to use this app!", ToastLength.Long).Show();
+                });
+                base.Window.RequestFeature(WindowFeatures.ActionBar);
+                base.SetTheme(Resource.Style.MainTheme);
 
+                Window.AddFlags(WindowManagerFlags.DrawsSystemBarBackgrounds);
+                Window.SetStatusBarColor(Color.FromHex("#8BC34A").ToAndroid());
+                TabLayoutResource = Resource.Layout.Tabbar;
+                ToolbarResource = Resource.Layout.Toolbar;
+                SecureStorageImplementation.StoragePassword = "lota";
+                base.OnCreate(bundle);
+                global::Xamarin.Forms.Forms.Init(this, bundle);
+                this.FinishAffinity();
+            }
         }
     }
 }

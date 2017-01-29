@@ -62,7 +62,7 @@ namespace HangoverApp.Views
                 newHtml = newHtml + item.OuterHtml;
             }
 
-            var baseUri = new Uri("https://www.just-eat.co.uk");
+            var baseUri = new Uri("https://www.just-eat.co.uk/");
             var pattern = @"(?<name>src|href|action)=""(?<value>/[^""]*)""";
             var matchEvaluator = new MatchEvaluator(
                 match =>
@@ -88,6 +88,7 @@ namespace HangoverApp.Views
 
             objWebView1.VerticalOptions = LayoutOptions.FillAndExpand;
             objWebView1.HorizontalOptions = LayoutOptions.FillAndExpand;
+            _navigationHelper = new NavigationHelper();
             objWebView1.Navigating +=
                 (sender, e) =>
                 {
@@ -103,6 +104,7 @@ namespace HangoverApp.Views
                 };
 
         }
+
 
     }
 }

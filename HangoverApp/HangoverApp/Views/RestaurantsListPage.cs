@@ -62,7 +62,7 @@ namespace HangoverApp.Views
                 newHtml = newHtml + item.OuterHtml;
             }
 
-            var baseUri = new Uri("https://www.just-eat.co.uk");
+            var baseUri = new Uri("https://www.just-eat.co.uk/");
             var pattern = @"(?<name>src|href|data-original)=""(?<value>/[^""]*)""";
             var matchEvaluator = new MatchEvaluator(
                 match =>
@@ -105,7 +105,7 @@ namespace HangoverApp.Views
             objWebView1.IsEnabled = false;
 
             Page page = new Page();
-            page.Navigation.PushModalAsync(new MainListPage());
+            await page.Navigation.PushModalAsync(new MainListPage());
             if (Device.OS == TargetPlatform.Android)
                 Application.Current.MainPage = new MainListPage();
         }

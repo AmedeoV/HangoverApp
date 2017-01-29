@@ -8,13 +8,6 @@ namespace HangoverApp.Views
 {
     public class NavigationHelper
     {
-        private RestaurantMenuPage _restaurantMenuPage;
-
-        public NavigationHelper(RestaurantMenuPage restaurantMenuPage)
-        {
-            _restaurantMenuPage = restaurantMenuPage;
-        }
-
         public static async void ConfirmNavigationAndSendToWebBrowserApp(object sender, WebNavigatingEventArgs e, ProgressBar activityIndicator)
         {
             Page page = new Page();

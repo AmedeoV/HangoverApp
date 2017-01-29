@@ -1,6 +1,4 @@
-﻿using HangoverApp.Controls;
-using HangoverApp.Style;
-using HangoverApp.ViewModels;
+﻿using HangoverApp.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -20,8 +18,6 @@ namespace HangoverApp.Views
     {
         public MainListPage()
         {
-            
-            BindingContext = new LoginViewModel(this);
             var oldPostcode = "";
 
             var activityIndicator = new ActivityIndicator

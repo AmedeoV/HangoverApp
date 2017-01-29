@@ -25,7 +25,7 @@ namespace HangoverApp.Helpers
 
             var document = new HtmlAgilityPack.HtmlDocument();
             document.LoadHtml(myXMLstring);
-
+            //Italy and Ireland : class nav-list-item has-sublist
             var isLoggedIn = document.DocumentNode.Descendants("div").FirstOrDefault(x => x.Attributes.Contains("class") && x.Attributes["class"].Value == "nav-container is-logged-in");
 
             if (isLoggedIn != null)
@@ -60,7 +60,7 @@ namespace HangoverApp.Helpers
                 return false;
         }
 
-        public async Task<string> SearchByPostcode(string authLoginToken, string postcode)
+        public string SearchByPostcode(string authLoginToken, string postcode)
         {
             var url = "https://www.just-eat.co.uk/search/do";
             var source = "";
@@ -69,7 +69,7 @@ namespace HangoverApp.Helpers
                 source = PostAction(url, authLoginToken, "", postcode).Result;
             });
 
-            
+
             task.Start();
             task.Wait();
 
@@ -77,7 +77,7 @@ namespace HangoverApp.Helpers
 
         }
 
-       public async Task<string> PostAction(string url, string cookie, string operation, string postcode)
+        public async Task<string> PostAction(string url, string cookie, string operation, string postcode)
         {
             using (var handler = new HttpClientHandler { UseCookies = false })
             using (var httpClient = new HttpClient(handler))

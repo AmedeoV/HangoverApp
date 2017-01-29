@@ -23,49 +23,49 @@ namespace HangoverApp.Helpers
 
             HtmlNode takingPreordersNode = document.DocumentNode.Descendants("div").FirstOrDefault(d => d.Attributes.Contains("class") && d.Attributes["class"].Value == "c-serp__open o-card c-serp__list");
 
-            var takingOrdersUrl = (from x in takingPreordersNode.DescendantNodes()
+            var takingOrdersUrl = (from x in takingPreordersNode.Descendants()
                                  where x.Name == "a" && x.Attributes.Contains("data-gtm")
                                  where x.Attributes["data-gtm"].Value != null
                                  select x.Attributes["href"].Value).ToArray();
 
            
 
-            var takingOrdersRestaurantNames = (from x in takingPreordersNode.DescendantNodes()
+            var takingOrdersRestaurantNames = (from x in takingPreordersNode.Descendants()
                                    where x.Name == "h2" && x.Attributes.Contains("itemprop")
                                    where x.Attributes["itemprop"].Value == "name"
                                    select WebUtility.HtmlDecode(x.InnerText)).ToArray();
 
-            var takingOrdersRestaurantCusine = (from x in takingPreordersNode.DescendantNodes()
+            var takingOrdersRestaurantCusine = (from x in takingPreordersNode.Descendants()
                                     where x.Name == "p" && x.Attributes.Contains("itemprop")
                                     where x.Attributes["itemprop"].Value == "servesCuisine"
                                     select WebUtility.HtmlDecode(x.InnerText)).ToArray();
 
-            var takingOrddersRestaurantLogo = (from x in takingPreordersNode.DescendantNodes()
+            var takingOrddersRestaurantLogo = (from x in takingPreordersNode.Descendants()
                                   where x.Name == "img" && x.Attributes.Contains("class")
                                   where x.Attributes["class"].Value == "c-restaurant__logo js-lazy"
                                   select x.Attributes["data-original"].Value).ToArray();
 
-            var takingOrdersRestaurantStarsImage = (from x in takingPreordersNode.DescendantNodes()
+            var takingOrdersRestaurantStarsImage = (from x in takingPreordersNode.Descendants()
                                         where x.Name == "img" && x.Attributes.Contains("alt")
                                         where x.Attributes["alt"].Value.Contains("stars")
                                         select x.Attributes["src"].Value).ToArray();
 
-            var takingOrdersRestaurantReviews = (from x in takingPreordersNode.DescendantNodes()
+            var takingOrdersRestaurantReviews = (from x in takingPreordersNode.Descendants()
                                      where x.Name == "meta" && x.Attributes.Contains("itemprop")
                                      where x.Attributes["itemprop"].Value == "ratingCount"
                                      select x.Attributes["content"].Value).ToArray();
 
-            //var restaurantDelivery = (from x in startNode.DescendantNodes()
+            //var restaurantDelivery = (from x in startNode.Descendants()
             //                          where x.Name == "p" && x.Attributes.Contains("class")
             //                          where (x.Attributes["class"].Value == "c-restaurant__delivery" || x.Attributes["class"].Value == "c-restaurant__collection")
             //                          select x.InnerText).ToArray();
 
-            //var restaurantMinimumSpend = (from x in startNode.DescendantNodes()
+            //var restaurantMinimumSpend = (from x in startNode.Descendants()
             //where x.Name == "p" && x.Attributes.Contains("class")
             //where (x.Attributes["class"].Value == "c-restaurant__minimum" || x.Attributes["class"].Value == "c-restaurant__delivery-start")
             //select x.InnerText).ToArray();
 
-            var takingOrdersRestauranDetails = (from x in takingPreordersNode.DescendantNodes()
+            var takingOrdersRestauranDetails = (from x in takingPreordersNode.Descendants()
                                     where x.Name == "div" && x.Attributes.Contains("class")
                                     where (x.Attributes["class"].Value == "c-restaurant__details")
                                     select x.InnerHtml).ToList();
@@ -90,39 +90,39 @@ namespace HangoverApp.Helpers
 
             HtmlNode notTakingPreodersNode = document.DocumentNode.Descendants("div").FirstOrDefault(d => d.Attributes.Contains("class") && d.Attributes["class"].Value == "c-serp__closed o-card c-serp__list");
 
-            var notTakingOrdersUrl = (from x in notTakingPreodersNode.DescendantNodes()
+            var notTakingOrdersUrl = (from x in notTakingPreodersNode.Descendants()
                                    where x.Name == "a" && x.Attributes.Contains("data-gtm")
                                    where x.Attributes["data-gtm"].Value != null
                                    select x.Attributes["href"].Value).ToArray();
 
 
 
-            var notTakingOrdersRestaurantNames = (from x in notTakingPreodersNode.DescendantNodes()
+            var notTakingOrdersRestaurantNames = (from x in notTakingPreodersNode.Descendants()
                                                where x.Name == "h2" && x.Attributes.Contains("itemprop")
                                                where x.Attributes["itemprop"].Value == "name"
                                                select WebUtility.HtmlDecode(x.InnerText)).ToArray();
 
-            var notTakingOrdersRestaurantCusine = (from x in notTakingPreodersNode.DescendantNodes()
+            var notTakingOrdersRestaurantCusine = (from x in notTakingPreodersNode.Descendants()
                                                 where x.Name == "p" && x.Attributes.Contains("itemprop")
                                                 where x.Attributes["itemprop"].Value == "servesCuisine"
                                                 select WebUtility.HtmlDecode(x.InnerText)).ToArray();
 
-            var notTakingOrddersRestaurantLogo = (from x in notTakingPreodersNode.DescendantNodes()
+            var notTakingOrddersRestaurantLogo = (from x in notTakingPreodersNode.Descendants()
                                                where x.Name == "img" && x.Attributes.Contains("class")
                                                where x.Attributes["class"].Value == "c-restaurant__logo js-lazy"
                                                select x.Attributes["data-original"].Value).ToArray();
 
-            var notTakingOrdersRestaurantStarsImage = (from x in notTakingPreodersNode.DescendantNodes()
+            var notTakingOrdersRestaurantStarsImage = (from x in notTakingPreodersNode.Descendants()
                                                     where x.Name == "img" && x.Attributes.Contains("alt")
                                                     where x.Attributes["alt"].Value.Contains("stars")
                                                     select x.Attributes["src"].Value).ToArray();
 
-            var notTakingOrdersRestaurantReviews = (from x in notTakingPreodersNode.DescendantNodes()
+            var notTakingOrdersRestaurantReviews = (from x in notTakingPreodersNode.Descendants()
                                                  where x.Name == "meta" && x.Attributes.Contains("itemprop")
                                                  where x.Attributes["itemprop"].Value == "ratingCount"
                                                  select x.Attributes["content"].Value).ToArray();
 
-            var notTakingOrdersRestauranDetails = (from x in notTakingPreodersNode.DescendantNodes()
+            var notTakingOrdersRestauranDetails = (from x in notTakingPreodersNode.Descendants()
                                                 where x.Name == "div" && x.Attributes.Contains("class")
                                                 where (x.Attributes["class"].Value == "c-restaurant__details")
                                                 select x.InnerHtml).ToList();

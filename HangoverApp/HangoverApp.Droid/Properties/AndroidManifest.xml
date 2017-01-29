@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.hangoverapp.hangoverapp" android:installLocation="auto">
 	<uses-sdk android:minSdkVersion="15" />
-  <uses-permission android:name="android.permission.INTERNET" />
-	<application android:label="Hangover App">
-		<activity android:name="com.google.android.gms.ads.AdActivity" android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" />
+	<uses-permission android:name="android.permission.INTERNET" />
+	<application android:label="Hangover App" android:icon="@drawable/icon">
+		<activity android:name="com.google.android.gms.ads.AdActivity" android:icon="@drawable/icon" android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" />
 	</application>
 </manifest>

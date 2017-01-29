@@ -37,72 +37,19 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="App.cs" />
-    <Compile Include="Controls\CarouselLayout.cs" />
     <Compile Include="Helpers\RestaurantsDeserializer.cs" />
-    <Compile Include="Helpers\Settings.cs" />
     <Compile Include="Helpers\WebOperations.cs" />
-    <Compile Include="Helper\ForumListData.cs" />
-    <Compile Include="Helper\Settings.cs" />
-    <Compile Include="Helper\StringHelper.cs" />
-    <Compile Include="Models\Article.cs" />
-    <Compile Include="Models\AuthorProfileDataCounts.cs" />
-    <Compile Include="Models\ForumType.cs" />
-    <Compile Include="Models\ICPFeeds.cs" />
-    <Compile Include="Models\ILoginManager.cs" />
-    <Compile Include="Models\MyProfile.cs" />
     <Compile Include="Models\Restaurant.cs" />
-    <Compile Include="Models\OpenRestaurant.cs" />
-    <Compile Include="Service\FavoriteDataService.cs" />
-    <Compile Include="Style\CPFavList.cs" />
-    <Compile Include="Style\CPListCell.cs" />
-    <Compile Include="Style\CustomListStyle.cs" />
-    <Compile Include="Style\DetailsView.cs" />
-    <Compile Include="Style\DynamicTemplateLayout.cs" />
-    <Compile Include="Style\MenuCell.cs" />
-    <Compile Include="Style\PagerIndicatorTabs.cs" />
-    <Compile Include="Style\SettingsUserView.cs" />
-    <Compile Include="Style\ShowProfileDetailsView.cs" />
-    <Compile Include="ViewModels\ArticlePageViewModel.cs" />
-    <Compile Include="ViewModels\ArticleViewModel.cs" />
-    <Compile Include="ViewModels\AuthorDataViewModel.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
-    <Compile Include="ViewModels\FavoriteListViewModel.cs" />
-    <Compile Include="Models\Feedback.cs" />
-    <Compile Include="ViewModels\ForumDetailsViewModel.cs" />
-    <Compile Include="ViewModels\ForumViewModel.cs" />
-    <Compile Include="ViewModels\IDataStore.cs" />
-    <Compile Include="ViewModels\LoginViewModel.cs" />
-    <Compile Include="ViewModels\ProfileViewModel.cs" />
-    <Compile Include="ViewModels\ShowProfileDetailsViewModel.cs" />
-    <Compile Include="ViewModels\StoresViewModel.cs" />
-    <Compile Include="ViewModels\StoreViewModel.cs" />
-    <Compile Include="ViewModels\TabbedPageViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
-    <Compile Include="Views\AboutPage.cs" />
-    <Compile Include="Views\ArticleListPage.cs" />
-    <Compile Include="Views\AuthorArticlePage.cs" />
-    <Compile Include="Views\CustomCell.cs" />
-    <Compile Include="Views\CustomCellPage.cs" />
-    <Compile Include="Views\FavoriteListPage.cs" />
-    <Compile Include="Views\ForumDetailListPage.cs" />
-    <Compile Include="Views\ForumListPage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Views\InfoPage.cs" />
     <Compile Include="Views\LoginPage.cs" />
     <Compile Include="Views\MainListPage.cs" />
-    <Compile Include="Views\MenuPage.cs" />
     <Compile Include="Views\NavigationHelper.cs" />
-    <Compile Include="Views\OfflinePage.cs" />
-    <Compile Include="Views\Profile.cs" />
     <Compile Include="Views\RestaurantMenuPage.cs" />
     <Compile Include="Views\RestaurantsListPage.cs" />
     <Compile Include="Views\ReviewsPage.cs" />
-    <Compile Include="Views\RootPage.cs" />
-    <Compile Include="Views\StorePage.cs" />
-    <Compile Include="Views\StoresPage.xaml.cs">
-      <DependentUpon>StoresPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\WebViewPage.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Akavache">
@@ -194,12 +141,6 @@
     <None Include="app.config" />
     <None Include="GettingStarted.Xamarin" />
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Views\StoresPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="..\..\packages\Xamarin.Forms.2.3.3.175\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.targets" Condition="Exists('..\..\packages\Xamarin.Forms.2.3.3.175\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.targets')" />
