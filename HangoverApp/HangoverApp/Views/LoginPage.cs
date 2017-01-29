@@ -5,6 +5,7 @@ using HangoverApp.Helpers;
 using Plugin.Connectivity;
 using Plugin.SecureStorage;
 using Xamarin.Forms;
+using Xamarinos.AdMob.Forms;
 
 namespace HangoverApp.Views
 {
@@ -13,14 +14,21 @@ namespace HangoverApp.Views
         public LoginPage()
         {
             Device.BeginInvokeOnMainThread(() => {
-                DisplayAlert("Hey " + "you", "Welcome", "OK");
+                DisplayAlert("Welcome", "Hey in order to use the app you will need a Just-Eat account, sign in or create one!", "OK");
             });
+            var myBanner = new AdBanner()
+            {
+                VerticalOptions = LayoutOptions.Start
+            };
+            //Set Your AdMob Key
+            myBanner.AdID = "ca-app-pub-3564256941949898/8465093569";
             StackLayout objStackLayout = new StackLayout()
             {
             };
             //
             Xamarin.Forms.WebView objWebView1 = new Xamarin.Forms.WebView();
             objWebView1.HeightRequest = 300;
+            objStackLayout.Children.Add(myBanner);
             objStackLayout.Children.Add(objWebView1);
 
             //
@@ -70,9 +78,7 @@ namespace HangoverApp.Views
             }
             else
             {
-
                 await page.DisplayAlert("Connection", "Connection lost, please check your connection and retry", "OK");
-                
             }
         }
 

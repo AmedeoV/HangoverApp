@@ -41,21 +41,6 @@ namespace HangoverApp
 
         }
 
-
-        #region ILoginManager implementation
-
-        public void ShowRootPage()
-        {
-        }
-
-        public void LogOut()
-        {
-            Properties["IsLoggedIn"] = false;
-            //new LoginPage (this);
-        }
-
-        #endregion
-
         protected override void OnStart()
         {
             // Handle when your app starts

@@ -21,6 +21,12 @@ namespace HangoverApp.Droid
     {
         protected override void OnCreate(Bundle bundle)
         {
+            //Register AdBanner Control Renderer
+            AdBannerRenderer.Init();
+
+            //Initialize Interstitial Manager with a Specific AdMob Key
+            CrossAdmobManager.Init("ca-app-pub-3564256941949898/8465093569");
+
             if (CrossConnectivity.Current.IsConnected)
             {
                 List<string> helloMessages = new List<string>()
@@ -50,6 +56,12 @@ namespace HangoverApp.Droid
                 base.OnCreate(bundle);
                 global::Xamarin.Forms.Forms.Init(this, bundle);
                 LoadApplication(new App());
+
+
+                var myBanner = new AdBanner();
+
+                //Set Your AdMob Key
+                myBanner.AdID = "ca-app-pub-3564256941949898/8465093569";
             }
             else
             {

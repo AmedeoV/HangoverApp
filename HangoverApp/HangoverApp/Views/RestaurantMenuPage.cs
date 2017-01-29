@@ -8,8 +8,10 @@ using System.Threading.Tasks;
 using Android.Webkit;
 using HangoverApp.Helpers;
 using HtmlAgilityPack;
+using Plugin.Connectivity;
 using Plugin.SecureStorage;
 using Xamarin.Forms;
+using Xamarinos.AdMob.Forms;
 
 namespace HangoverApp.Views
 {
@@ -22,6 +24,13 @@ namespace HangoverApp.Views
         }
         public RestaurantMenuPage(string source)
         {
+            var myBanner = new AdBanner()
+            {
+                VerticalOptions = LayoutOptions.Start
+            };
+            //Set Your AdMob Key
+            myBanner.AdID = "ca-app-pub-3564256941949898/8465093569";
+
             Button btnCheckOtherRestaurants = new Button()
             {
                 Text = "Check other restaurants!",
@@ -41,6 +50,7 @@ namespace HangoverApp.Views
             BackgroundImage = "RestaurantsBackground.png";
             Xamarin.Forms.WebView objWebView1 = new Xamarin.Forms.WebView();
             objWebView1.HeightRequest = 300;
+            objStackLayout.Children.Add(myBanner);
             objStackLayout.Children.Add(objWebView1);
             objStackLayout.Children.Add(btnCheckOtherRestaurants);
             objStackLayout.Children.Add(activityIndicator);
@@ -148,18 +158,31 @@ namespace HangoverApp.Views
             objWebView1.VerticalOptions = LayoutOptions.FillAndExpand;
             objWebView1.HorizontalOptions = LayoutOptions.FillAndExpand;
             _navigationHelper = new NavigationHelper();
-            objWebView1.Navigating +=
-                (sender, e) =>
+            objWebView1.Navigating += async (sender, e) =>
                 {
-                    Views.NavigationHelper.ConfirmNavigationAndSendToWebBrowserApp(sender, e, activityIndicator);
+                    if (CrossConnectivity.Current.IsConnected)
+                    {
+                        Views.NavigationHelper.ConfirmNavigationAndSendToWebBrowserApp(sender, e, activityIndicator);
+                    }
+                    else
+                    {
+                        e.Cancel = true;
+                        await DisplayAlert("Connection", "Connection lost, please check your connection and retry", "OK");
+                    }
                 };
             //
             //
             this.Content = objStackLayout;
-            btnCheckOtherRestaurants.Clicked +=
-                (sender, e) =>
+            btnCheckOtherRestaurants.Clicked += async (sender, e) =>
                 {
-                    NavigationHelper.CheckOtherRestaurantsEvent(sender, e, activityIndicator, objWebView1);
+                    if (CrossConnectivity.Current.IsConnected)
+                    {
+                        NavigationHelper.CheckOtherRestaurantsEvent(sender, e, activityIndicator, objWebView1);
+                    }
+                    else
+                    {
+                        await DisplayAlert("Connection", "Connection lost, please check your connection and retry", "OK");
+                    }
                 };
 
         }

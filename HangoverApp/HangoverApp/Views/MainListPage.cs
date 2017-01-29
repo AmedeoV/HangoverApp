@@ -11,6 +11,7 @@ using HangoverApp.Models;
 using Plugin.Connectivity;
 using Plugin.SecureStorage;
 using Xamarin.Forms;
+using Xamarinos.AdMob.Forms;
 
 namespace HangoverApp.Views
 {
@@ -30,7 +31,7 @@ namespace HangoverApp.Views
             {
                 oldPostcode = CrossSecureStorage.Current.GetValue("postcode");
             }
-            
+
 
             activityIndicator.IsRunning = true;
             activityIndicator.IsEnabled = true;
@@ -88,7 +89,14 @@ namespace HangoverApp.Views
 
             textBox.Completed += async (sender, e) =>
             {
-                await SearchByPostcode(activityIndicator, textBox, button, loadingLabel, backgroundImage);
+                if (CrossConnectivity.Current.IsConnected)
+                {
+                    await SearchByPostcode(activityIndicator, textBox, button, loadingLabel, backgroundImage);
+                }
+                else
+                {
+                    await DisplayAlert("Connection", "Connection lost, please check your connection and retry", "OK");
+                }
             };
 
             layout.Children.Add(textBox);
@@ -113,7 +121,14 @@ namespace HangoverApp.Views
 
             button.Clicked += async (sender, e) =>
             {
-                await SearchByPostcode(activityIndicator, textBox, button, loadingLabel, backgroundImage);
+                if (CrossConnectivity.Current.IsConnected)
+                {
+                    await SearchByPostcode(activityIndicator, textBox, button, loadingLabel, backgroundImage);
+                }
+                else
+                {
+                    await DisplayAlert("Connection", "Connection lost, please check your connection and retry", "OK");
+                }
             };
 
             Content = new ScrollView { Content = relativelayout };

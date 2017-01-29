@@ -8,8 +8,10 @@ using System.Threading.Tasks;
 using Android.Webkit;
 using HangoverApp.Helpers;
 using HtmlAgilityPack;
+using Plugin.Connectivity;
 using Plugin.SecureStorage;
 using Xamarin.Forms;
+using Xamarinos.AdMob.Forms;
 using WebView = Xamarin.Forms.WebView;
 
 namespace HangoverApp.Views
@@ -18,6 +20,13 @@ namespace HangoverApp.Views
     {
         public RestaurantsListPage(string source)
         {
+            var myBanner = new AdBanner()
+            {
+                VerticalOptions = LayoutOptions.Start
+            };
+            //Set Your AdMob Key
+            myBanner.AdID = "ca-app-pub-3564256941949898/8465093569";
+
             var document = new HtmlAgilityPack.HtmlDocument();
             document.LoadHtml(source);
             var activityIndicator = new ProgressBar()
@@ -38,63 +47,92 @@ namespace HangoverApp.Views
             {
             };
             objWebView1.HeightRequest = 300;
+            objStackLayout.Children.Add(myBanner);
+
             objStackLayout.Children.Add(objWebView1);
 
             objStackLayout.Children.Add(btnChangePostcode);
             objStackLayout.Children.Add(activityIndicator);
 
 
-            btnChangePostcode.Clicked +=
-                 (sender, e) =>
+            btnChangePostcode.Clicked += async (sender, e) =>
                 {
-                    ChangePostcodeEvent(sender, e, activityIndicator, objWebView1);
+                    if (CrossConnectivity.Current.IsConnected)
+                    {
+                        ChangePostcodeEvent(sender, e, activityIndicator, objWebView1);
+                    }
+                    else
+                    {
+                        await DisplayAlert("Connection", "Connection lost, please check your connection and retry", "OK");
+                    }
                 };
 
             HtmlNode node = document.DocumentNode.Descendants("div").FirstOrDefault(d => d.Attributes.Contains("class") && d.Attributes["class"].Value == "c-serp__open o-card c-serp__list");
 
-            string newHtml = node.InnerHtml;
-
-            var scriptsAndStyle = document.DocumentNode.Descendants()
-                       .Where(n => n.Name == "script").ToList();
-
-            foreach (var item in scriptsAndStyle)
+            if (node != null)
             {
-                newHtml = newHtml + item.OuterHtml;
+
+
+                string newHtml = node.InnerHtml;
+
+                var scriptsAndStyle = document.DocumentNode.Descendants()
+                    .Where(n => n.Name == "script").ToList();
+
+                foreach (var item in scriptsAndStyle)
+                {
+                    newHtml = newHtml + item.OuterHtml;
+                }
+
+                var baseUri = new Uri("https://www.just-eat.co.uk/");
+                var pattern = @"(?<name>src|href|data-original)=""(?<value>/[^""]*)""";
+                var matchEvaluator = new MatchEvaluator(
+                    match =>
+                    {
+                        var value = match.Groups["value"].Value;
+                        Uri uri;
+
+                        if (Uri.TryCreate(baseUri, value, out uri))
+                        {
+                            var name = match.Groups["name"].Value;
+                            return string.Format("{0}=\"{1}\"", name, uri.AbsoluteUri);
+                        }
+                        return null;
+                    });
+                var adjustedHtml = Regex.Replace(newHtml, pattern, matchEvaluator);
+
+                adjustedHtml = adjustedHtml + @"<link href='file:///android_asset/globalCss.css' rel='stylesheet'/>" +
+                               @"<link href='file:///android_asset/restaurantCss.css' rel='stylesheet'/>" +
+                               @"<link href='file:///android_asset/fontCss.css' rel='stylesheet'/>";
+
+                var htmlSource = new HtmlWebViewSource();
+                htmlSource.Html = adjustedHtml;
+                objWebView1.Source = htmlSource;
+
+                objWebView1.VerticalOptions = LayoutOptions.FillAndExpand;
+                objWebView1.HorizontalOptions = LayoutOptions.FillAndExpand;
+                objWebView1.Navigating += async (sender, e) =>
+                {
+                    if (CrossConnectivity.Current.IsConnected)
+                    {
+                        await ShowRestaurantMenu(e, activityIndicator, objWebView1);
+                    }
+                    else
+                    {
+                        e.Cancel = true;
+                        await
+                            DisplayAlert("Connection", "Connection lost, please check your connection and retry", "OK");
+                    }
+                };
+
+                //
+                //
+                this.Content = objStackLayout;
+            }
+            else
+            {
+                DisplayAlert("Oops!", "There are no places open at this time around here.. Sorry pal!", "OK");
             }
 
-            var baseUri = new Uri("https://www.just-eat.co.uk/");
-            var pattern = @"(?<name>src|href|data-original)=""(?<value>/[^""]*)""";
-            var matchEvaluator = new MatchEvaluator(
-                match =>
-                {
-                    var value = match.Groups["value"].Value;
-                    Uri uri;
-
-                    if (Uri.TryCreate(baseUri, value, out uri))
-                    {
-                        var name = match.Groups["name"].Value;
-                        return string.Format("{0}=\"{1}\"", name, uri.AbsoluteUri);
-                    }
-                    return null;
-                });
-            var adjustedHtml = Regex.Replace(newHtml, pattern, matchEvaluator);
-
-            adjustedHtml = adjustedHtml + @"<link href='file:///android_asset/globalCss.css' rel='stylesheet'/>" + @"<link href='file:///android_asset/restaurantCss.css' rel='stylesheet'/>" + @"<link href='file:///android_asset/fontCss.css' rel='stylesheet'/>";
-
-            var htmlSource = new HtmlWebViewSource();
-            htmlSource.Html = adjustedHtml;
-            objWebView1.Source = htmlSource;
-
-            objWebView1.VerticalOptions = LayoutOptions.FillAndExpand;
-            objWebView1.HorizontalOptions = LayoutOptions.FillAndExpand;
-            objWebView1.Navigating += async (sender, e) =>
-            {
-                await ShowRestaurantMenu(e, activityIndicator, objWebView1);
-            };
-
-            //
-            //
-            this.Content = objStackLayout;
 
         }
 
